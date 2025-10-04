@@ -1,0 +1,272 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi", "Hello", "Hey", "Hola", "Yo", "What's up", "Good morning",
+        "Good afternoon", "Good evening", "How are you", "Is anyone there?",
+        "Hey there", "Hiya", "Sup", "Greetings", "Howdy"
+      ],
+      "responses": [
+        "Hello! How can I help you today?",
+        "Hi there! Ready to discuss the latest in tech?",
+        "Hey! What can I do for you?",
+        "Hiya! Need info on trending technology?",
+        "Greetings! How can I support you today?"
+      ],
+      "context": [""]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye", "See you later", "Goodbye", "Catch you later", "Take care",
+        "See ya", "Later", "Gotta go", "Peace out", "I'm leaving"
+      ],
+      "responses": [
+        "Goodbye! Stay updated with tech trends!",
+        "See you later! Keep innovating!",
+        "Take care! Come back if you need more tech info.",
+        "Bye! Hope I was helpful with the tech insights!",
+        "Catch you later! Stay curious about technology!"
+      ],
+      "context": [""]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks", "Thank you", "That's helpful", "Thanks a lot",
+        "Appreciate it", "Cheers", "Thanks for the help", "Much appreciated"
+      ],
+      "responses": [
+        "You're welcome! Happy to help!",
+        "Anytime! Glad I could assist with tech info.",
+        "My pleasure! Feel free to ask more questions.",
+        "You got it! Always here to discuss technology.",
+        "No problem! Stay curious about tech trends!"
+      ],
+      "context": [""]
+    },
+    {
+      "tag": "ai_trends",
+      "patterns": [
+        "What's new in AI", "AI trends", "Latest AI technology", "Tell me about artificial intelligence",
+        "What's trending in AI", "AI news", "Machine learning trends", "Deep learning updates",
+        "What's happening in AI", "AI developments", "Latest in machine learning"
+      ],
+      "responses": [
+        "AI is evolving rapidly! We're seeing major advances in generative AI like ChatGPT and Claude, multimodal models that understand text, images, and audio, and AI agents that can perform complex tasks autonomously.",
+        "The hottest AI trends include large language models (LLMs), AI-powered coding assistants, autonomous AI agents, and more efficient training methods like LoRA and quantization.",
+        "AI is trending with developments in: Generative AI for content creation, AI safety and alignment research, edge AI for on-device processing, and AI integration in everyday applications.",
+        "Current AI trends focus on making models more efficient, reliable, and accessible. We're seeing breakthroughs in reasoning capabilities, multi-agent systems, and responsible AI development."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "quantum_computing",
+      "patterns": [
+        "Quantum computing", "What is quantum computing", "Quantum computers",
+        "Quantum technology trends", "Latest in quantum", "Quantum computing news",
+        "Tell me about quantum computers", "Quantum computing developments"
+      ],
+      "responses": [
+        "Quantum computing is making huge strides! Companies like IBM, Google, and IonQ are developing more stable qubits and achieving quantum advantage in specific tasks. We're moving from research to practical applications.",
+        "The quantum computing field is advancing with better error correction, increased qubit counts, and cloud-based quantum computing services. Industries are exploring quantum for cryptography, drug discovery, and optimization problems.",
+        "Recent quantum trends include: Quantum-as-a-Service platforms, hybrid quantum-classical algorithms, and progress toward fault-tolerant quantum computers. We're still in early stages but progress is accelerating!",
+        "Quantum computing is trending as major tech companies invest heavily in the technology. While general-purpose quantum computers are still years away, we're seeing practical applications in materials science and financial modeling."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "web3_blockchain",
+      "patterns": [
+        "Web3", "Blockchain trends", "Cryptocurrency news", "What is Web3",
+        "NFT trends", "DeFi", "Decentralized finance", "Blockchain technology",
+        "Latest in blockchain", "Crypto trends", "Web3 developments"
+      ],
+      "responses": [
+        "Web3 and blockchain continue evolving beyond cryptocurrency. We're seeing growth in decentralized identity, blockchain for supply chain transparency, and institutional adoption of digital assets.",
+        "The blockchain space is maturing with: Layer 2 scaling solutions, sustainable proof-of-stake networks, real-world asset tokenization, and increased regulatory clarity in major markets.",
+        "Web3 trends include decentralized autonomous organizations (DAOs), blockchain integration in gaming and entertainment, and practical applications in healthcare and logistics beyond just financial use cases.",
+        "Blockchain technology is trending with enterprise adoption, carbon-neutral networks, and interoperability solutions. The focus is shifting from speculation to building useful decentralized applications."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "vr_ar_metaverse",
+      "patterns": [
+        "Virtual reality", "VR trends", "Augmented reality", "AR technology",
+        "Metaverse", "What's new in VR", "Mixed reality", "XR trends",
+        "Latest VR technology", "AR developments", "Metaverse news"
+      ],
+      "responses": [
+        "VR/AR technology is advancing rapidly! We're seeing lighter headsets with better resolution, mixed reality experiences blending physical and digital worlds, and practical applications in training, healthcare, and remote collaboration.",
+        "The metaverse concept is evolving beyond hype into practical virtual spaces for work, education, and entertainment. Apple's Vision Pro and Meta's Quest devices are pushing the boundaries of spatial computing.",
+        "Current XR trends include: Passthrough AR for enhanced reality, haptic feedback systems, enterprise adoption for training simulations, and social VR platforms for remote teamwork and events.",
+        "AR/VR is trending with more affordable devices, wireless capabilities, and killer apps emerging in fitness, education, and professional design. The focus is on solving real problems rather than just gaming."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "electric_vehicles",
+      "patterns": [
+        "Electric vehicles", "EV trends", "Electric cars", "Tesla news",
+        "What's new in EVs", "Battery technology", "Autonomous vehicles",
+        "Self-driving cars", "EV developments", "Electric vehicle market"
+      ],
+      "responses": [
+        "The EV market is booming! We're seeing longer ranges (300+ miles is common), faster charging infrastructure, more affordable models, and traditional automakers going all-in on electric. Battery technology is improving rapidly.",
+        "Electric vehicle trends include: Solid-state batteries promising even longer ranges, vehicle-to-grid technology, autonomous driving features, and sustainable manufacturing practices. EVs are becoming mainstream!",
+        "The automotive industry is transforming with EVs leading the way. We're seeing innovations in battery chemistry, wireless charging, AI-powered driver assistance, and expanded charging networks making EVs practical for everyone.",
+        "EV technology is trending with breakthroughs in: Ultra-fast charging (10-80% in 15 minutes), affordable models under $30k, improved cold-weather performance, and integration with renewable energy systems."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "5g_6g",
+      "patterns": [
+        "5G technology", "6G", "5G trends", "Wireless technology",
+        "What is 5G", "6G development", "Mobile networks", "Telecom trends",
+        "Latest in 5G", "Next generation networks"
+      ],
+      "responses": [
+        "5G is now widely deployed, offering ultra-fast speeds and low latency. It's enabling IoT devices, remote surgery, smart cities, and immersive experiences. Meanwhile, research on 6G has begun, promising even more capabilities!",
+        "5G technology is transforming industries with private 5G networks for enterprises, enhanced mobile broadband, and massive IoT connectivity. 6G research is exploring terahertz frequencies and AI-native network architecture.",
+        "Current wireless trends include: 5G standalone networks offering full capabilities, network slicing for customized services, edge computing integration, and satellite-to-phone connectivity for universal coverage.",
+        "5G deployment is accelerating globally, bringing innovations like: Ultra-reliable low-latency communications for autonomous vehicles, fixed wireless access replacing home broadband, and enabling real-time extended reality experiences."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "cybersecurity",
+      "patterns": [
+        "Cybersecurity trends", "Latest security threats", "Cyber security",
+        "Information security", "Data protection", "Security news",
+        "Hacking trends", "Privacy technology", "What's new in security"
+      ],
+      "responses": [
+        "Cybersecurity is more critical than ever! Major trends include zero-trust architecture, AI-powered threat detection, quantum-resistant encryption, and increased focus on supply chain security after high-profile breaches.",
+        "The security landscape is evolving with: Passwordless authentication, security orchestration and automation, extended detection and response (XDR), and privacy-enhancing technologies as regulations tighten globally.",
+        "Current cybersecurity trends focus on: Ransomware defense strategies, securing cloud-native applications, identity and access management, and preparing for quantum computing threats to current encryption standards.",
+        "Security technology is advancing with AI-driven security operations centers, blockchain for data integrity, biometric authentication improvements, and comprehensive security frameworks for remote work environments."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "cloud_computing",
+      "patterns": [
+        "Cloud computing", "Cloud trends", "AWS Azure Google Cloud",
+        "What's new in cloud", "Cloud technology", "Serverless computing",
+        "Multi-cloud", "Cloud developments", "Edge computing"
+      ],
+      "responses": [
+        "Cloud computing continues dominating IT! We're seeing multi-cloud strategies, serverless architectures reducing operational overhead, edge computing bringing processing closer to users, and cloud-native development becoming standard.",
+        "Major cloud trends include: Kubernetes and containerization everywhere, infrastructure as code, FinOps for cost optimization, and hybrid cloud solutions combining on-premises and cloud resources seamlessly.",
+        "The cloud landscape is evolving with: AI/ML platforms integrated into cloud services, sustainable cloud initiatives, improved security and compliance tools, and specialized cloud services for industries like healthcare and finance.",
+        "Cloud technology is trending with distributed cloud architectures, low-code/no-code platforms on cloud infrastructure, cloud gaming services, and edge computing enabling real-time IoT applications and autonomous systems."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "biotechnology",
+      "patterns": [
+        "Biotech trends", "Biotechnology", "Gene editing", "CRISPR",
+        "Medical technology", "Healthcare innovation", "Synthetic biology",
+        "What's new in biotech", "Biotech developments", "Genetic engineering"
+      ],
+      "responses": [
+        "Biotechnology is revolutionizing medicine! CRISPR gene editing, personalized medicine based on genetics, mRNA vaccine technology, and lab-grown organs are becoming reality. AI is accelerating drug discovery dramatically.",
+        "Biotech trends include: Gene therapies for previously incurable diseases, synthetic biology creating new materials, brain-computer interfaces, and longevity research. The intersection of AI and biology is particularly exciting!",
+        "Current biotech innovations focus on: Precision medicine tailored to individuals, early disease detection through liquid biopsies, microbiome research for health optimization, and bioengineered solutions for sustainability.",
+        "The biotech field is advancing with: CRISPR base editing for precise genetic corrections, organoid technology for drug testing, wearable biosensors for continuous health monitoring, and AI-designed proteins for new therapeutics."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "sustainability_tech",
+      "patterns": [
+        "Green technology", "Sustainable tech", "Climate tech", "Clean energy",
+        "Renewable energy trends", "Environmental technology", "Carbon capture",
+        "Sustainability innovations", "Green tech trends", "Eco-friendly technology"
+      ],
+      "responses": [
+        "Sustainability tech is booming! We're seeing breakthroughs in solar efficiency, grid-scale battery storage, green hydrogen production, carbon capture technology, and circular economy innovations for waste reduction.",
+        "Climate tech trends include: Next-generation nuclear reactors, alternative proteins and lab-grown meat, sustainable aviation fuels, ocean cleanup technologies, and AI optimizing energy consumption across industries.",
+        "Green technology is advancing with: Perovskite solar cells promising cheaper renewable energy, vertical farming for sustainable food production, electric aviation, and bio-based materials replacing plastics.",
+        "Sustainability innovations focus on: Direct air carbon capture, smart grids integrating renewables efficiently, green concrete reducing construction emissions, and blockchain for transparent supply chain sustainability."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "general_tech_trends",
+      "patterns": [
+        "What's trending in technology", "Latest technology", "Tech news",
+        "What's hot in tech", "Technology trends", "Tech updates",
+        "What's new in technology", "Current tech trends", "Technology developments"
+      ],
+      "responses": [
+        "The biggest tech trends right now include: Generative AI transforming creative work, quantum computing progress, sustainable technology solutions, spatial computing with VR/AR, and advances in biotechnology and personalized medicine!",
+        "Technology is evolving across multiple fronts! Key areas include AI agents and automation, electric and autonomous vehicles, Web3 and blockchain maturation, edge computing, and cybersecurity innovations to protect digital infrastructure.",
+        "Current hot tech topics are: Large language models and AI assistants, 5G network expansion, cloud-native development, IoT and smart home technology, renewable energy innovations, and brain-computer interfaces entering practical use.",
+        "The tech landscape in 2025 is defined by: AI integration everywhere, sustainable and green technologies, quantum computing breakthroughs, advanced robotics, digital health innovations, and converging technologies creating new possibilities!"
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "robotics",
+      "patterns": [
+        "Robotics", "Robot trends", "Humanoid robots", "Automation",
+        "What's new in robotics", "Industrial robots", "Robot technology",
+        "Robotics developments", "AI robots", "Autonomous robots"
+      ],
+      "responses": [
+        "Robotics is advancing rapidly! Humanoid robots are becoming more capable, industrial automation is smarter with AI, collaborative robots (cobots) work alongside humans safely, and soft robotics enables new applications.",
+        "Robot technology trends include: Warehouse automation transforming logistics, surgical robots improving precision medicine, agricultural robots for sustainable farming, and home robots becoming more practical and affordable.",
+        "The robotics field is evolving with: Better dexterity and manipulation through AI, swarm robotics for complex tasks, autonomous delivery robots, and robots learning from human demonstrations rather than explicit programming.",
+        "Current robotics innovations focus on: Boston Dynamics-style agile robots, Tesla's Optimus humanoid project, drone delivery systems, exoskeletons for healthcare and industry, and underwater/space exploration robots."
+      ],
+      "context": ["tech_info"]
+    },
+    {
+      "tag": "how_are_you",
+      "patterns": [
+        "How are you doing", "How are you", "How's it going", "What's up with you",
+        "How have you been", "You good?", "You okay?", "How's everything"
+      ],
+      "responses": [
+        "I'm functioning perfectly! Ready to chat about tech trends or anything else you'd like to know!",
+        "I'm doing great! Always excited to discuss the latest in technology. What interests you?",
+        "All systems running smoothly! What tech topics can I help you explore today?",
+        "I'm here and ready to help! Want to learn about what's trending in tech?"
+      ],
+      "context": [""]
+    },
+    {
+      "tag": "name_query",
+      "patterns": [
+        "What's your name", "Who are you", "What should I call you",
+        "Tell me about yourself", "What are you", "Your name?"
+      ],
+      "responses": [
+        "I'm a tech-savvy chatbot designed to keep you updated on the latest trends and innovations in technology!",
+        "I'm your friendly tech assistant! I'm here to discuss everything from AI to quantum computing and beyond.",
+        "You can call me TechBot! I'm programmed to help you stay informed about cutting-edge technology and trends.",
+        "I'm an AI assistant specialized in technology trends. Think of me as your guide to what's hot in the tech world!"
+      ],
+      "context": [""]
+    },
+    {
+      "tag": "help",
+      "patterns": [
+        "Can you help me", "What can you do", "Help", "Assist me",
+        "What are your capabilities", "How can you help", "What do you know"
+      ],
+      "responses": [
+        "I can help you with information about the latest technology trends including AI, quantum computing, blockchain, VR/AR, EVs, cybersecurity, cloud computing, biotech, sustainability tech, robotics, and much more! Just ask!",
+        "I'm here to discuss trending technologies! Ask me about any tech topic like artificial intelligence, 5G/6G, electric vehicles, green technology, or general tech news. What interests you?",
+        "I can provide insights on: AI and machine learning trends, emerging technologies, industry developments, innovation news, and what's hot in the tech world. What would you like to know?",
+        "My expertise covers the latest in technology! From quantum computers to sustainable tech, from robotics to biotechnology. What tech trend would you like to explore?"
+      ],
+      "context": [""]
+    }
+  ]
+}
