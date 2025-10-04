@@ -7,6 +7,10 @@ import streamlit as st
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
 
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+
 # Initialize
 lemmatizer = WordNetLemmatizer()
 ERROR_THRESHOLD = 0.25
