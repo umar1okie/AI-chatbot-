@@ -11,6 +11,7 @@ import json
 import pickle
 import numpy as np
 import streamlit as st
+from keras.models import load_model
 
 # ------------------ ENV / LOGGING ------------------
 
@@ -99,8 +100,11 @@ try:
 
     if os.path.exists(model_path_keras):
         model = load_model(model_path_keras)   # Preferred modern format
+        st.success("✅ Loaded model: General_chatbot.keras")
     elif os.path.exists(model_path_h5):
-        model = load_model(model_path_h5)      # Legacy fallback
+        # legacy fallback with compile=False to avoid batch_shape error
+        model = load_model(model_path_h5, compile=False)
+        st.warning("⚠️ Loaded legacy model: General_chatbot.h5 (re-save as .keras recommended)")
     else:
         st.error("❌ No model file found. Please upload `General_chatbot.keras` or `General_chatbot.h5`.")
 except Exception as e:
