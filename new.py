@@ -57,12 +57,12 @@ trainY = training[:, len(words):]
 
 # --- Build Model ---
 model = tf.keras.Sequential([
-    layers.Dense(128, input_shape=(len(trainX[0]),), activation='relu'),
+    layers.Input(shape=(len(trainX[0]),)),   # 👈 replaces input_shape/batch_shape
+    layers.Dense(128, activation='relu'),
     layers.Dropout(0.5),
     layers.Dense(64, activation='relu'),
     layers.Dense(len(trainY[0]), activation='softmax')
 ])
-
 # Optimizer
 sgd = optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 
