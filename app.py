@@ -1,26 +1,40 @@
+import os
 import random
 import json
 import pickle
 import numpy as np
 import nltk
 import streamlit as st
+import logging
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
-import os
 
-# Add local nltk_data folder to path
-nltk.data.path.append(os.path.join(os.path.dirname(__file__), "nltk_data"))
+# ------------------ SETUP ------------------
 
-# nltk.download('punkt')
-# nltk.download('wordnet')
-# nltk.download('stopwords')
-# nltk.download('omw-1.4') 
+# Suppress TensorFlow warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+logging.getLogger("tensorflow").setLevel(logging.ERROR)
+
+# Configure NLTK data path (so it works on Streamlit Cloud)
+nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
+if not os.path.exists(nltk_data_path):
+    os.mkdir(nltk_data_path)
+
+nltk.data.path.append(nltk_data_path)
+
+# Ensure required NLTK resources are available
+for pkg in ["punkt", "wordnet", "stopwords", "omw-1.4"]:
+    try:
+        nltk.data.find(f"corpora/{pkg}")
+    except LookupError:
+        nltk.download(pkg, download_dir=nltk_data_path)
 
 # Initialize
 lemmatizer = WordNetLemmatizer()
 ERROR_THRESHOLD = 0.25
 
-# Load data
+# ------------------ LOAD DATA ------------------
+
 with open('intents.json') as file:
     intents = json.load(file)
 
@@ -28,7 +42,8 @@ words = pickle.load(open('words.pkl', 'rb'))
 classes = pickle.load(open('classes.pkl', 'rb'))
 model = load_model('General_chatbot.h5')
 
-# Preprocessing
+# ------------------ NLP FUNCTIONS ------------------
+
 def clean_up_sentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
@@ -43,19 +58,14 @@ def bag_of_words(sentence):
                 bag[i] = 1
     return np.array(bag)
 
-# Prediction
 def predict_class(sentence):
     bow = bag_of_words(sentence)
     res = model.predict(np.array([bow]), verbose=0)[0]
     results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
     results.sort(key=lambda x: x[1], reverse=True)
 
-    return_list = []
-    for r in results:
-        return_list.append({'intent': classes[r[0]], 'probability': str(r[1])})
-    return return_list
+    return [{'intent': classes[r[0]], 'probability': str(r[1])} for r in results]
 
-# Response
 def get_response(ints, intents_json):
     if len(ints) == 0:
         return "I didn’t understand that. Can you rephrase?"
@@ -65,7 +75,6 @@ def get_response(ints, intents_json):
         if i['tag'] == tag:
             return random.choice(i['responses'])
     return "I didn’t understand that. Can you rephrase?"
-
 
 # ------------------ STREAMLIT UI ------------------
 
@@ -77,7 +86,7 @@ st.write("Talk with the trained chatbot below!")
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
-# User input box at bottom
+# User input box
 user_input = st.chat_input("Type your message...")
 
 if user_input:
@@ -95,3 +104,4 @@ for msg in st.session_state["messages"]:
         st.chat_message("user").markdown(msg["content"])
     else:
         st.chat_message("assistant").markdown(msg["content"])
+
