@@ -1,6 +1,8 @@
+
 streamlit==1.48.0
 tensorflow==2.20.0
+keras
 numpy==1.24.3
 pandas==2.1.1
 nltk==3.8.1
-
+matplotlib>=3.8.0
