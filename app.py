@@ -1,5 +1,5 @@
 
-# app.py - runtime-safe version (tries to install nltk if missing, robust model/file handling)
+# app.py - Streamlit chatbot with runtime-safe model loading
 
 import os
 import sys
@@ -9,31 +9,27 @@ import logging
 import random
 import json
 import pickle
-import nltk
 import numpy as np
 import streamlit as st
 
 # ------------------ ENV / LOGGING ------------------
 
-# Suppress noisy TF logs early (before TF import)
+# Suppress noisy TF logs before importing keras
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
-# Utility: ensure a package is importable; install it if missing (temporary fallback)
+# Utility: ensure package is installed
 def ensure_package(name, version=None):
     try:
         return importlib.import_module(name)
     except Exception:
         pkg_spec = f"{name}=={version}" if version else name
         print(f"[startup] Package {name} not found — installing {pkg_spec} ...", file=sys.stderr)
-        try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", pkg_spec])
-        except subprocess.CalledProcessError as e:
-            print(f"[startup] Failed to install {pkg_spec}: {e}", file=sys.stderr)
-            raise
+        subprocess.check_call([sys.executable, "-m", "pip", "install", pkg_spec])
         return importlib.import_module(name)
 
-# Ensure nltk is available (small; safe to pip install at runtime as a fallback)
+# ------------------ NLTK SETUP ------------------
+
 nltk = None
 try:
     nltk = importlib.import_module("nltk")
@@ -42,15 +38,13 @@ except Exception:
 
 from nltk.stem import WordNetLemmatizer
 
-# ------------------ NLTK DATA (place inside app folder) ------------------
-
 base_dir = os.path.dirname(__file__) or "."
 nltk_data_path = os.path.join(base_dir, "nltk_data")
 os.makedirs(nltk_data_path, exist_ok=True)
 if nltk_data_path not in nltk.data.path:
     nltk.data.path.append(nltk_data_path)
 
-# Download corpora/tokenizers only if missing
+# Ensure corpora exist
 _nltk_targets = {
     "punkt": "tokenizers/punkt",
     "wordnet": "corpora/wordnet",
@@ -61,24 +55,20 @@ for pkg, find_path in _nltk_targets.items():
     try:
         nltk.data.find(find_path)
     except LookupError:
-        # attempt to download into our app folder
         nltk.download(pkg, download_dir=nltk_data_path)
-
-# ------------------ APP UI (show python version for debugging) ------------------
-
-st.set_page_config(page_title="AI Chatbot", page_icon="🤖")
-st.title("🤖 AI Chatbot")
-st.write("Talk with the trained chatbot below!")
-
-# Show Python version (useful to confirm runtime Python on Streamlit Cloud)
-st.caption(f"Server Python: {sys.version.splitlines()[0]}")
-
-# ------------------ SAFE LOAD OF ARTIFACTS ------------------
 
 lemmatizer = WordNetLemmatizer()
 ERROR_THRESHOLD = 0.25
 
-# Helper to safely load a pickle/h5 and show friendly error in-app
+# ------------------ STREAMLIT APP ------------------
+
+st.set_page_config(page_title="AI Chatbot", page_icon="🤖")
+st.title("🤖 AI Chatbot")
+st.write("Talk with the trained chatbot below!")
+st.caption(f"Server Python: {sys.version.splitlines()[0]}")
+
+# ------------------ SAFE LOAD HELPERS ------------------
+
 def safe_load_pickle(path):
     try:
         with open(path, "rb") as f:
@@ -99,28 +89,31 @@ words = safe_load_pickle(os.path.join(base_dir, "words.pkl"))
 classes = safe_load_pickle(os.path.join(base_dir, "classes.pkl"))
 intents = safe_load_json(os.path.join(base_dir, "intents.json"))
 
-# Load model but handle failure gracefully
+# ------------------ MODEL LOADING ------------------
+
 model = None
 try:
-    # Import load_model after setting TF log level
     from keras.models import load_model
-    model_path = os.path.join(base_dir, "General_chatbot.h5")
-    if os.path.exists(model_path):
-        model = load_model(model_path)
+    model_path_keras = os.path.join(base_dir, "General_chatbot.keras")
+    model_path_h5 = os.path.join(base_dir, "General_chatbot.h5")
+
+    if os.path.exists(model_path_keras):
+        model = load_model(model_path_keras)   # Preferred modern format
+    elif os.path.exists(model_path_h5):
+        model = load_model(model_path_h5)      # Legacy fallback
     else:
-        st.error("Model file `General_chatbot.h5` not found in app folder.")
+        st.error("❌ No model file found. Please upload `General_chatbot.keras` or `General_chatbot.h5`.")
 except Exception as e:
-    st.error(f"Failed to load Keras model: {e}")
+    st.error(f"❌ Failed to load Keras model: {e}")
     model = None
 
-# ------------------ NLP / PREDICTION ------------------
+# ------------------ NLP / BOT LOGIC ------------------
 
 def clean_up_sentence(sentence):
     if not sentence:
         return []
     sentence_words = nltk.word_tokenize(sentence)
-    sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
-    return sentence_words
+    return [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
 
 def bag_of_words(sentence):
     if words is None:
@@ -135,7 +128,6 @@ def bag_of_words(sentence):
 
 def predict_class(sentence):
     if model is None or words is None or classes is None:
-        # If model or resources not available, return empty (handled by get_response)
         return []
     bow = bag_of_words(sentence)
     if bow.size == 0:
@@ -150,7 +142,7 @@ def get_response(ints, intents_json):
         return "I didn’t understand that. Can you rephrase?"
     tag = ints[0]['intent']
     if not intents_json:
-        return "Bot resources are missing (intents)."
+        return "Bot resources are missing (intents.json)."
     for i in intents_json.get('intents', []):
         if i.get('tag') == tag:
             return random.choice(i.get('responses', ["I didn't understand that."]))

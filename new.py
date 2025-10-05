@@ -1,3 +1,4 @@
+
 import random
 import json
 import pickle
@@ -7,7 +8,7 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from tensorflow.keras import layers, optimizers
 
-
+# --- Initialize ---
 lemmatizer = WordNetLemmatizer()
 
 # Load intents.json
@@ -19,6 +20,7 @@ classes = []
 documents = []
 ignoreLetters = ['?', '!', '.', ',']
 
+# Tokenize and prepare data
 for intent in intents['intents']:
     for pattern in intent['patterns']:
         wordList = nltk.word_tokenize(pattern)
@@ -58,22 +60,33 @@ training = np.array(training)
 trainX = training[:, :len(words)]
 trainY = training[:, len(words):]
 
-# Build model
-model = tf.keras.Sequential()
-model.add(layers.Dense(128, input_shape=(len(trainX[0]),), activation='relu'))
-model.add(layers.Dropout(0.5))
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dense(len(trainY[0]), activation='softmax'))
+# --- Build Model ---
+model = tf.keras.Sequential([
+    layers.Dense(128, input_shape=(len(trainX[0]),), activation='relu'),
+    layers.Dropout(0.5),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(len(trainY[0]), activation='softmax')
+])
 
 # Optimizer
 sgd = optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 
-# Compile model
+# Compile
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 # Train
 hist = model.fit(np.array(trainX), np.array(trainY), epochs=200, batch_size=5, verbose=1)
 
-# Save
+# --- Save Models ---
+
+# 1. Legacy HDF5 format (backward compatibility)
 model.save("General_chatbot.h5")
-print("Executed Successfully ✅")
+
+# 2. New Keras v3 format (recommended for long-term)
+model.save("General_chatbot.keras")
+
+# 3. TensorFlow SavedModel format (for TF Serving / cross-version use)
+model.export("General_chatbot_export")
+
+print("✅ Model saved successfully in .h5, .keras, and SavedModel formats")
+
