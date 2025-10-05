@@ -8,6 +8,8 @@ import json
 import pickle
 import numpy as np
 import streamlit as st
+from tensorflow.keras.models import load_model
+
 
 # ------------------ ENV / LOGGING ------------------
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -67,11 +69,10 @@ intents = safe_load_json(os.path.join(base_dir, "intents.json"))
 # ------------------ MODEL LOADING ------------------
 model = None
 try:
-    from keras.models import load_model
     model_path = os.path.join(base_dir, "General_chatbot.keras")
 
     if os.path.exists(model_path):
-        model = load_model(model_path)   # ✅ modern .keras format only
+        model = load_model(model_path)   # ✅ use tf.keras loader
     else:
         st.error("❌ No model file found. Please upload `General_chatbot.keras`.")
 except Exception as e:
