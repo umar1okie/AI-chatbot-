@@ -1,7 +1,0 @@
-streamlit
-tensorflow-cpu==2.20.0
-scikit-learn
-pandas
-numpy
-nltk
-pickle-mixin
