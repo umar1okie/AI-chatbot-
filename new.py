@@ -7,9 +7,6 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from tensorflow.keras import layers, optimizers
 
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('stopwords')
 
 lemmatizer = WordNetLemmatizer()
 
