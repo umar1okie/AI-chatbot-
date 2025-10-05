@@ -1,6 +1,3 @@
-
-# app.py - Streamlit chatbot with runtime-safe model loading
-
 import os
 import sys
 import subprocess
@@ -11,32 +8,13 @@ import json
 import pickle
 import numpy as np
 import streamlit as st
-from keras.models import load_model
 
 # ------------------ ENV / LOGGING ------------------
-
-# Suppress noisy TF logs before importing keras
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
-# Utility: ensure package is installed
-def ensure_package(name, version=None):
-    try:
-        return importlib.import_module(name)
-    except Exception:
-        pkg_spec = f"{name}=={version}" if version else name
-        print(f"[startup] Package {name} not found — installing {pkg_spec} ...", file=sys.stderr)
-        subprocess.check_call([sys.executable, "-m", "pip", "install", pkg_spec])
-        return importlib.import_module(name)
-
 # ------------------ NLTK SETUP ------------------
-
-nltk = None
-try:
-    nltk = importlib.import_module("nltk")
-except Exception:
-    nltk = ensure_package("nltk", "3.8.1")
-
+import nltk
 from nltk.stem import WordNetLemmatizer
 
 base_dir = os.path.dirname(__file__) or "."
@@ -46,15 +24,13 @@ if nltk_data_path not in nltk.data.path:
     nltk.data.path.append(nltk_data_path)
 
 # Ensure corpora exist
-_nltk_targets = {
+for pkg, path in {
     "punkt": "tokenizers/punkt",
     "wordnet": "corpora/wordnet",
-    "stopwords": "corpora/stopwords",
-    "omw-1.4": "corpora/omw-1.4",
-}
-for pkg, find_path in _nltk_targets.items():
+    "omw-1.4": "corpora/omw-1.4"
+}.items():
     try:
-        nltk.data.find(find_path)
+        nltk.data.find(path)
     except LookupError:
         nltk.download(pkg, download_dir=nltk_data_path)
 
@@ -62,14 +38,12 @@ lemmatizer = WordNetLemmatizer()
 ERROR_THRESHOLD = 0.25
 
 # ------------------ STREAMLIT APP ------------------
-
 st.set_page_config(page_title="AI Chatbot", page_icon="🤖")
 st.title("🤖 AI Chatbot")
 st.write("Talk with the trained chatbot below!")
 st.caption(f"Server Python: {sys.version.splitlines()[0]}")
 
 # ------------------ SAFE LOAD HELPERS ------------------
-
 def safe_load_pickle(path):
     try:
         with open(path, "rb") as f:
@@ -91,28 +65,20 @@ classes = safe_load_pickle(os.path.join(base_dir, "classes.pkl"))
 intents = safe_load_json(os.path.join(base_dir, "intents.json"))
 
 # ------------------ MODEL LOADING ------------------
-
 model = None
 try:
     from keras.models import load_model
-    model_path_keras = os.path.join(base_dir, "General_chatbot.keras")
-    model_path_h5 = os.path.join(base_dir, "General_chatbot.h5")
+    model_path = os.path.join(base_dir, "General_chatbot.keras")
 
-    if os.path.exists(model_path_keras):
-        model = load_model(model_path_keras)   # Preferred modern format
-        st.success("✅ Loaded model: General_chatbot.keras")
-    elif os.path.exists(model_path_h5):
-        # legacy fallback with compile=False to avoid batch_shape error
-        model = load_model(model_path_h5, compile=False)
-        st.warning("⚠️ Loaded legacy model: General_chatbot.h5 (re-save as .keras recommended)")
+    if os.path.exists(model_path):
+        model = load_model(model_path)   # ✅ modern .keras format only
     else:
-        st.error("❌ No model file found. Please upload `General_chatbot.keras` or `General_chatbot.h5`.")
+        st.error("❌ No model file found. Please upload `General_chatbot.keras`.")
 except Exception as e:
     st.error(f"❌ Failed to load Keras model: {e}")
     model = None
 
 # ------------------ NLP / BOT LOGIC ------------------
-
 def clean_up_sentence(sentence):
     if not sentence:
         return []
@@ -153,7 +119,6 @@ def get_response(ints, intents_json):
     return "I didn’t understand that. Can you rephrase?"
 
 # ------------------ STREAMLIT CHAT UI ------------------
-
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
@@ -170,4 +135,3 @@ for msg in st.session_state["messages"]:
         st.chat_message("user").markdown(msg["content"])
     else:
         st.chat_message("assistant").markdown(msg["content"])
-

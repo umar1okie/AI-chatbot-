@@ -1,4 +1,3 @@
-
 import random
 import json
 import pickle
@@ -15,9 +14,7 @@ lemmatizer = WordNetLemmatizer()
 with open('intents.json') as file:
     intents = json.load(file)
 
-words = []
-classes = []
-documents = []
+words, classes, documents = [], [], []
 ignoreLetters = ['?', '!', '.', ',']
 
 # Tokenize and prepare data
@@ -44,9 +41,7 @@ outputEmpty = [0] * len(classes)
 
 for document in documents:
     bag = []
-    wordPatterns = document[0]
-    wordPatterns = [lemmatizer.lemmatize(word.lower()) for word in wordPatterns]
-
+    wordPatterns = [lemmatizer.lemmatize(word.lower()) for word in document[0]]
     for word in words:
         bag.append(1 if word in wordPatterns else 0)
 
@@ -77,16 +72,6 @@ model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy
 # Train
 hist = model.fit(np.array(trainX), np.array(trainY), epochs=200, batch_size=5, verbose=1)
 
-# --- Save Models ---
-
-# 1. Legacy HDF5 format (backward compatibility)
-model.save("General_chatbot.h5")
-
-# 2. New Keras v3 format (recommended for long-term)
+# --- Save Model (only .keras format) ---
 model.save("General_chatbot.keras")
-
-# 3. TensorFlow SavedModel format (for TF Serving / cross-version use)
-model.export("General_chatbot_export")
-
-print("✅ Model saved successfully in .h5, .keras, and SavedModel formats")
-
+print("✅ Model trained & saved successfully in .keras format")
