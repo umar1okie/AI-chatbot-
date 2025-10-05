@@ -6,11 +6,15 @@ import nltk
 import streamlit as st
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
+import os
 
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('stopwords')
-nltk.download('omw-1.4') 
+# Add local nltk_data folder to path
+nltk.data.path.append(os.path.join(os.path.dirname(__file__), "nltk_data"))
+
+# nltk.download('punkt')
+# nltk.download('wordnet')
+# nltk.download('stopwords')
+# nltk.download('omw-1.4') 
 
 # Initialize
 lemmatizer = WordNetLemmatizer()
