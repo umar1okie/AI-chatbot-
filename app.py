@@ -9,6 +9,7 @@ import logging
 import random
 import json
 import pickle
+import nltk
 import numpy as np
 import streamlit as st
 
